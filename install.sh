@@ -42,6 +42,9 @@ kernel="$(uname -r | cut -d '.' -f1-2)"
 pacman_install dkms "linux${kernel/./}-headers"
 pacman_install "linux${kernel/./}-virtualbox-host-modules"
 echo "${ar18_sudo_password}" | sudo -Sk /bin/vboxreload
+
+echo "${ar18_sudo_password}" | sudo -Sk usermod -aG vboxusers "${user_name}"
+
 #echo "${ar18_sudo_password}" | sudo -Sk /bin/vboxconfig
 
 ##################################SCRIPT_END###################################
