@@ -32,18 +32,22 @@ set -o pipefail
 set -eu
 #################################SCRIPT_START##################################
 
-if [ ! -v ar18_helper_functions ]; then rm -rf "/tmp/helper_functions_$(whoami)"; cd /tmp; git clone https://github.com/ar18-linux/helper_functions.git; mv "/tmp/helper_functions" "/tmp/helper_functions_$(whoami)"; . "/tmp/helper_functions_$(whoami)/helper_functions/helper_functions.sh"; cd "${script_dir}"; export ar18_helper_functions=1; fi
-obtain_sudo_password
+ar18.script.import ar18.script.install
+ar18.script.import ar18.pacman.install
+ar18.script.import ar18.aur.install
+ar18.script.import ar18.script.execute_with_sudo
 
-pacman_install virtualbox virtualbox-host-modules-arch virtualbox-host-dkms \
+. "${script_dir}/vars"
+
+ar18.pacman.install virtualbox virtualbox-host-modules-arch virtualbox-host-dkms \
   linux-headers virtualbox-guest-iso
-aur_install virtualbox-ext-oracle 
+ar18.aur.install virtualbox-ext-oracle 
 kernel="$(uname -r | cut -d '.' -f1-2)"
-pacman_install dkms "linux${kernel/./}-headers"
-pacman_install "linux${kernel/./}-virtualbox-host-modules"
-echo "${ar18_sudo_password}" | sudo -Sk /bin/vboxreload
+ar18.pacman.install dkms "linux${kernel/./}-headers"
+ar18.pacman.install "linux${kernel/./}-virtualbox-host-modules"
+ar18.script.execute_with_sudo "/bin/vboxreload"
 
-echo "${ar18_sudo_password}" | sudo -Sk usermod -aG vboxusers "${user_name}"
+ar18.script.execute_with_sudo usermod -aG vboxusers "${user_name}"
 
 #echo "${ar18_sudo_password}" | sudo -Sk /bin/vboxconfig
 
