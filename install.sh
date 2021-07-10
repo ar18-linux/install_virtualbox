@@ -90,8 +90,8 @@ ar18.script.import ar18.aur.install
 ar18.script.import ar18.script.execute_with_sudo
 
 . "${script_dir}/vars"
-
-ar18.pacman.install virtualbox virtualbox-host-modules-arch virtualbox-host-dkms \
+#virtualbox-host-modules-arch
+ar18.pacman.install virtualbox virtualbox-host-dkms \
   linux-headers virtualbox-guest-iso
 ar18.aur.install virtualbox-ext-oracle 
 kernel="$(uname -r | cut -d '.' -f1-2)"
